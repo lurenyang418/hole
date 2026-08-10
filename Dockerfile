@@ -54,5 +54,5 @@ LABEL org.opencontainers.image.title="Mihomo NAS Docker Distribution" \
       org.opencontainers.image.version="${PROJECT_VERSION}" \
       org.opencontainers.image.created="${BUILD_DATE}" \
       org.opencontainers.image.licenses="GPL-3.0-only, MIT" \
-      io.example.mihomo.version="${MIHOMO_VERSION}" \
-      io.example.metacubexd.version="${METACUBEXD_VERSION}"
+      io.github.hole.mihomo.version="${MIHOMO_VERSION}" \
+      io.github.hole.metacubexd.version="${METACUBEXD_VERSION}"
