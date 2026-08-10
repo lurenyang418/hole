@@ -13,13 +13,13 @@ source "${ROOT_DIR}/versions.env"
 : "${METACUBEXD_SHA256:?METACUBEXD_SHA256 is required}"
 : "${ALPINE_IMAGE_DIGEST:?ALPINE_IMAGE_DIGEST is required}"
 
-IMAGE=${IMAGE:-ghcr.io/OWNER/PROJECT:dev}
+IMAGE=${IMAGE:-ghcr.io/lurenyang418/hole:dev}
 TAGS=${TAGS:-${IMAGE}}
 PLATFORMS=${PLATFORMS:-linux/amd64}
 PROJECT_VERSION=${PROJECT_VERSION:-0.1.0-dev}
 VCS_REF=${VCS_REF:-$(git -C "${ROOT_DIR}" rev-parse HEAD 2>/dev/null || printf '%s' unknown)}
 BUILD_DATE=${BUILD_DATE:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}
-SOURCE_URL=${SOURCE_URL:-https://github.com/OWNER/PROJECT}
+SOURCE_URL=${SOURCE_URL:-https://github.com/lurenyang418/hole}
 PUSH=${PUSH:-0}
 
 build_args=(

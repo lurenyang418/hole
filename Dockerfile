@@ -43,7 +43,7 @@ ARG MIHOMO_VERSION
 ARG PROJECT_VERSION=0.1.0-dev
 ARG VCS_REF=unknown
 ARG BUILD_DATE=unknown
-ARG SOURCE_URL=https://github.com/OWNER/PROJECT
+ARG SOURCE_URL=https://github.com/lurenyang418/hole
 ARG METACUBEXD_VERSION
 
 LABEL org.opencontainers.image.title="Mihomo NAS Docker Distribution" \

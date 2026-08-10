@@ -1,0 +1,58 @@
+name: Dependabot auto-merge
+
+on:
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  enable-automerge:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Find the associated Dependabot pull request
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          pr_number="$(gh api \
+            "repos/${REPOSITORY}/actions/runs/${RUN_ID}/pull_requests" \
+            --jq '.[0].number // empty')"
+
+          if [[ -z "${pr_number}" ]]; then
+            echo "No pull request is associated with this CI run."
+            exit 0
+          fi
+
+          author="$(gh pr view "${pr_number}" \
+            --repo "${REPOSITORY}" \
+            --json author \
+            --jq '.author.login')"
+
+          if [[ "${author}" != "dependabot[bot]" ]]; then
+            echo "Pull request #${pr_number} is authored by ${author}; skipping."
+            exit 0
+          fi
+
+          echo "number=${pr_number}" >> "${GITHUB_OUTPUT}"
+
+      - name: Enable squash auto-merge
+        if: steps.pr.outputs.number != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+          REPOSITORY: ${{ github.repository }}
+        run: gh pr merge "${PR_NUMBER}" --repo "${REPOSITORY}" --auto --squash
