@@ -1,0 +1,7 @@
+.git
+.github
+tmp
+README.md
+plan.md
+*.swp
+*.log

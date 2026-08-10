@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE: ghcr.io/${{ github.repository }}:ci-${{ github.sha }}
+      SOURCE_URL: https://github.com/${{ github.repository }}
+      PROJECT_VERSION: 0.1.0-ci
+      VCS_REF: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Validate shell scripts
+        run: bash -n scripts/*.sh
+
+      - name: Build amd64 image
+        run: ./scripts/build.sh
+
+      - name: Verify bundled UI
+        run: ./scripts/verify-ui.sh "$IMAGE"
+
+      - name: Validate example config
+        run: ./scripts/validate-config.sh "$IMAGE"
+
+      - name: Run smoke test
+        run: ./scripts/smoke-test.sh "$IMAGE"
+
+      - name: Validate Compose examples
+        env:
+          MIHOMO_IMAGE: "$IMAGE"
+          APP_IMAGE: busybox:1.36
+        run: |
+          docker compose -f examples/compose.yaml config
+          docker compose -f examples/compose.host-proxy.yaml config
+          docker compose -f examples/app-with-proxy.yaml config
+
+      - name: Assert safe port publishing
+        env:
+          MIHOMO_IMAGE: "$IMAGE"
+        run: |
+          test "$(docker compose -f examples/compose.yaml config --format json | jq '[.services.mihomo.ports[] | select(.target == 7890)] | length')" = 0
+          docker compose -f examples/compose.host-proxy.yaml config --format json \
+            | jq -e '[.services.mihomo.ports[] | select(.target == 7890 and .published == "7890" and .host_ip == "127.0.0.1")] | length == 1'
+
+      - name: Build arm64 image
+        env:
+          PLATFORMS: linux/arm64
+        run: ./scripts/build.sh

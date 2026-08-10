@@ -1,0 +1,20 @@
+services:
+  app:
+    image: ${APP_IMAGE:?Set APP_IMAGE}
+
+    environment:
+      HTTP_PROXY: "http://mihomo:7890"
+      HTTPS_PROXY: "http://mihomo:7890"
+      http_proxy: "http://mihomo:7890"
+      https_proxy: "http://mihomo:7890"
+      NO_PROXY: "localhost,127.0.0.1,::1"
+      no_proxy: "localhost,127.0.0.1,::1"
+
+    networks:
+      - default
+      - mihomo-proxy
+
+networks:
+  mihomo-proxy:
+    external: true
+    name: mihomo-proxy

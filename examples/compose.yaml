@@ -1,0 +1,19 @@
+services:
+  mihomo:
+    image: ${MIHOMO_IMAGE:?Set MIHOMO_IMAGE}
+    container_name: mihomo
+    restart: unless-stopped
+
+    volumes:
+      - ./mihomo:/root/.config/mihomo
+
+    ports:
+      - "127.0.0.1:9090:9090"
+
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    name: mihomo-proxy
+    driver: bridge

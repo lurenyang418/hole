@@ -1,0 +1,23 @@
+mixed-port: 7890
+
+allow-lan: true
+bind-address: "*"
+
+mode: rule
+log-level: info
+ipv6: true
+
+external-controller: "0.0.0.0:9090"
+secret: "CHANGE_ME_TO_A_LONG_RANDOM_SECRET"
+
+external-ui: /usr/share/mihomo/ui
+
+# The image sets SAFE_PATHS=/usr/share/mihomo/ui.
+
+tun:
+  enable: false
+
+profile:
+  store-selected: true
+
+# Add proxy-providers, proxies, proxy-groups, and rules for your deployment.
