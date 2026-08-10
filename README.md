@@ -22,11 +22,18 @@ long random value. Add your proxy providers, proxies, groups, and rules to
 that directory. The Compose examples mount the complete `mihomo` directory so
 provider data and Mihomo state survive container replacement.
 
-Set the image reference and start the container-only example:
+The Compose examples default to the published image. Start the container-only
+example with:
 
 ```bash
-export MIHOMO_IMAGE=ghcr.io/lurenyang418/hole:0.1.0
 docker compose -f examples/compose.yaml up -d
+```
+
+To pin a specific release or use a locally built image, override the image:
+
+```bash
+MIHOMO_IMAGE=ghcr.io/lurenyang418/hole:0.1.0 \
+  docker compose -f examples/compose.yaml up -d
 ```
 
 Open `http://127.0.0.1:9090/ui/`. The controller is intentionally published

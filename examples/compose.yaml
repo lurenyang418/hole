@@ -1,6 +1,6 @@
 services:
   mihomo:
-    image: ${MIHOMO_IMAGE:?Set MIHOMO_IMAGE}
+    image: ${MIHOMO_IMAGE:-ghcr.io/lurenyang418/hole:latest}
     container_name: mihomo
     restart: unless-stopped
 
