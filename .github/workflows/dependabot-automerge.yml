@@ -8,6 +8,7 @@ on:
       - completed
 
 permissions:
+  actions: read
   contents: write
   pull-requests: write
 
@@ -42,7 +43,7 @@ jobs:
             --json author \
             --jq '.author.login')"
 
-          if [[ "${author}" != "dependabot[bot]" ]]; then
+          if [[ "${author}" != "dependabot[bot]" && "${author}" != "app/dependabot" ]]; then
             echo "Pull request #${pr_number} is authored by ${author}; skipping."
             exit 0
           fi
