@@ -116,8 +116,8 @@ the official Alpine base image and its packages. See
 
 ## Dependency updates
 
-Dependabot checks GitHub Actions and Dockerfile dependencies weekly. A separate
-workflow enables squash auto-merge for Dependabot pull requests only after the
-CI workflow succeeds. Image version and digest pins in `versions.env` remain
-the source of truth for reproducible builds; review those changes carefully
-when an upstream image update changes the build inputs.
+Dependabot checks GitHub Actions dependencies weekly. A separate workflow
+enables squash auto-merge for Dependabot pull requests only after the CI
+workflow succeeds. Mihomo and Alpine image version/digest pins are kept
+together in `versions.env`; update those inputs as a unit so reproducible builds
+do not end up with a changed tag and a stale digest.

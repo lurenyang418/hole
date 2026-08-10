@@ -11,14 +11,3 @@ updates:
       github-actions:
         patterns:
           - "*"
-
-  - package-ecosystem: docker
-    directory: /
-    schedule:
-      interval: weekly
-      day: monday
-    open-pull-requests-limit: 5
-    groups:
-      docker-images:
-        patterns:
-          - "*"
